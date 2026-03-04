@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blaze Calendar | CrossFit Blaze</title>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTL4oVWwuo6FX3civ5DaxCRN7PaMewrbc",
+            authDomain: "blaze-calendar-signup.firebaseapp.com",
+            projectId: "blaze-calendar-signup",
+            storageBucket: "blaze-calendar-signup.firebasestorage.app",
+            messagingSenderId: "666680491440",
+            appId: "1:666680491440:web:fea6712e6af1a32e3bea75"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        // Make db available globally
+        window.blazeDB = db;
+    </script>
     <style>
         * {
             margin: 0;
@@ -752,8 +775,8 @@
             document.getElementById('selectedTime').value = '';
         }
         
-        // Form submission
-        document.getElementById('recoverySignupForm').addEventListener('submit', function(e) {
+        // Form submission - Save to Firebase
+        document.getElementById('recoverySignupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!document.getElementById('selectedTime').value) {
@@ -775,13 +798,31 @@
                 '530pm': '5:30 PM'
             };
             
-            // Log the signup data (you can replace this with actual submission)
-            console.log('Signup:', { firstName, lastName, time, date: 'March 10, 2026' });
-            
-            document.getElementById('confirmedTime').textContent = timeLabels[time];
-            document.getElementById('signupFormContainer').style.display = 'none';
-            document.getElementById('signupSuccess').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try {
+                // Import Firestore functions
+                const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+                
+                // Save to Firebase
+                await addDoc(collection(window.blazeDB, "recoveryDaySignups"), {
+                    firstName: firstName,
+                    lastName: lastName,
+                    classTime: timeLabels[time],
+                    eventDate: "March 10, 2026",
+                    eventName: "Recovery Day",
+                    signupDate: serverTimestamp(),
+                    status: "confirmed"
+                });
+                
+                console.log('Signup saved to Firebase!');
+                
+                document.getElementById('confirmedTime').textContent = timeLabels[time];
+                document.getElementById('signupFormContainer').style.display = 'none';
+                document.getElementById('signupSuccess').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error saving signup:', error);
+                alert('There was an error saving your signup. Please try again.');
+            }
         });
         
         // Initial render
