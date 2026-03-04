@@ -304,6 +304,111 @@
             line-height: 1.8;
         }
         
+        /* Sign-up Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ccc;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .time-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .time-slot {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            border-color: #ff6b35;
+            background: rgba(255,107,53,0.1);
+        }
+        
+        .time-slot.selected {
+            border-color: #4ecdc4;
+            background: rgba(78,205,196,0.2);
+        }
+        
+        .time-label {
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+        }
+        
+        .cancel-btn {
+            background: rgba(255,255,255,0.1);
+            color: #888;
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cancel-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        
+        .signup-form-container, .success-message {
+            margin-bottom: 30px;
+        }
+        
         @media (max-width: 600px) {
             .calendar-grid {
                 gap: 5px;
@@ -364,7 +469,72 @@
                 </div>
             </div>
             
-            <a href="blaze-recovery-day-signup.html" class="cta-btn">Sign Up Now →</a>
+            <button class="cta-btn" onclick="showSignupForm()">Sign Up Now →</button>
+        </div>
+        
+        <!-- Sign-up Form -->
+        <div class="signup-form-container" id="signupFormContainer" style="display: none;">
+            <div class="card">
+                <h2 style="color: #ff6b35; margin-bottom: 10px;">📝 Recovery Day Sign-Up</h2>
+                <p style="color: #888; margin-bottom: 25px;">Tuesday, March 10, 2026</p>
+                
+                <form id="recoverySignupForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name *</label>
+                            <input type="text" id="firstName" required placeholder="Your first name">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name *</label>
+                            <input type="text" id="lastName" required placeholder="Your last name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Your Class Time *</label>
+                        <div class="time-selection">
+                            <div class="time-slot" onclick="selectTime('7am', this)">
+                                <div class="time-label">7:00 AM</div>
+                            </div>
+                            <div class="time-slot" onclick="selectTime('8am', this)">
+                                <div class="time-label">8:00 AM</div>
+                            </div>
+                            <div class="time-slot" onclick="selectTime('9am', this)">
+                                <div class="time-label">9:00 AM</div>
+                            </div>
+                            <div class="time-slot" onclick="selectTime('10am', this)">
+                                <div class="time-label">10:00 AM</div>
+                            </div>
+                            <div class="time-slot" onclick="selectTime('1130am', this)">
+                                <div class="time-label">11:30 AM</div>
+                            </div>
+                            <div class="time-slot" onclick="selectTime('430pm', this)">
+                                <div class="time-label">4:30 PM</div>
+                            </div>
+                            <div class="time-slot" onclick="selectTime('530pm', this)">
+                                <div class="time-label">5:30 PM</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectedTime" required>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 25px;">
+                        <button type="submit" class="submit-btn">Complete Sign-Up ✓</button>
+                        <button type="button" class="cancel-btn" onclick="hideSignupForm()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Success Message -->
+        <div class="success-message" id="signupSuccess" style="display: none;">
+            <div class="card" style="text-align: center; border: 2px solid #4ecdc4;">
+                <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
+                <h2 style="color: #4ecdc4; margin-bottom: 10px;">You're Signed Up!</h2>
+                <p style="color: #ccc; font-size: 1.1rem;">See you Tuesday, March 10th at <span id="confirmedTime" style="color: #ff6b35; font-weight: 700;"></span></p>
+                <p style="color: #888; margin-top: 15px;">FREE B12 or Glutathione shot ready for you 💪</p>
+                <button class="cta-btn" onclick="hideSuccess()" style="margin-top: 25px;">Back to Calendar</button>
+            </div>
         </div>
         
         <!-- Calendar Navigation -->
@@ -550,6 +720,68 @@
         // Close modal on outside click
         document.getElementById('eventModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
+        });
+        
+        // Sign-up Form Functions
+        function showSignupForm() {
+            document.querySelector('.featured-event').style.display = 'none';
+            document.getElementById('signupFormContainer').style.display = 'block';
+            document.getElementById('signupSuccess').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function hideSignupForm() {
+            document.getElementById('signupFormContainer').style.display = 'none';
+            document.querySelector('.featured-event').style.display = 'block';
+            document.getElementById('recoverySignupForm').reset();
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            document.getElementById('selectedTime').value = '';
+        }
+        
+        function selectTime(time, element) {
+            document.getElementById('selectedTime').value = time;
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+        
+        function hideSuccess() {
+            document.getElementById('signupSuccess').style.display = 'none';
+            document.querySelector('.featured-event').style.display = 'block';
+            document.getElementById('recoverySignupForm').reset();
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            document.getElementById('selectedTime').value = '';
+        }
+        
+        // Form submission
+        document.getElementById('recoverySignupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!document.getElementById('selectedTime').value) {
+                alert('Please select a class time');
+                return;
+            }
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const time = document.getElementById('selectedTime').value;
+            
+            const timeLabels = {
+                '7am': '7:00 AM',
+                '8am': '8:00 AM',
+                '9am': '9:00 AM',
+                '10am': '10:00 AM',
+                '1130am': '11:30 AM',
+                '430pm': '4:30 PM',
+                '530pm': '5:30 PM'
+            };
+            
+            // Log the signup data (you can replace this with actual submission)
+            console.log('Signup:', { firstName, lastName, time, date: 'March 10, 2026' });
+            
+            document.getElementById('confirmedTime').textContent = timeLabels[time];
+            document.getElementById('signupFormContainer').style.display = 'none';
+            document.getElementById('signupSuccess').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
         
         // Initial render
